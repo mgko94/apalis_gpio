@@ -31,10 +31,9 @@ if __name__ == "__main__":
     parser.add_argument("line",help="line name",nargs="?")
 
     args = parser.parse_args()
-
+    print(args.line)
     if not "line" in args or args.line is None:
-        print(args.line)
-        # list_chips_and_pins()
+        list_chips_and_pins()
     else:
         while True:
             set_line_state(args.line,True)
