@@ -24,5 +24,5 @@ print(led.consumer)
 while True:
     led.set_value(0)
     time.sleep(0.1)
-    led.set_value(1)
+    led.set_value(0)
     time.sleep(0.1)
