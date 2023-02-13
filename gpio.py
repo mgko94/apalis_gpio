@@ -1,42 +1,28 @@
-#!python
-import time
-import argparse
 import gpiod
+import sys
+import time
 
-def list_chips_and_pins():
-    for chip in gpiod.chip_iter():
-        print(f"{chip.label}\t{chip.name}")
+if len(sys.argv) > 2:
+    LED_CHIP = sys.argv[1]
+    LED_LINE_OFFSET = int(sys.argv[2])
+else:
+    print('''Usage:
+    python3 blink.py <chip> <line offset>''')
+    sys.exit()
 
-        for line in chip.get_all_lines():
-            print(f"\t{line.offset}\t{line.name}\t{line.consumer}")
+chip = gpiod.chip(LED_CHIP)
+led = chip.get_line(LED_LINE_OFFSET)
 
-def set_line_state(line,state):
-    gpioline = gpiod.find_line(line)
+config = gpiod.line_request()
+config.consumer = "Blink"
+config.request_type = gpiod.line_request.DIRECTION_OUTPUT
 
-    if gpioline is None:
-        print("Invalid line name.")
-        return
+led.request(config)
 
-    config = gpiod.line_request()
+print(led.consumer)
 
-    config.consumer="GPIO sample"
-    config.request_type=gpiod.line_request.DIRECTION_OUTPUT
-
-    gpioline.request(config, 1 if state else 0)
-
-if __name__ == "__main__":
-
-    parser = argparse.ArgumentParser(description="Python-GPIO sample for Torizon")
-
-    parser.add_argument("line",help="line name",nargs="?")
-
-    args = parser.parse_args()
-    print(args.line)
-    if not "line" in args or args.line is None:
-        list_chips_and_pins()
-    else:
-        while True:
-            set_line_state(args.line,True)
-            time.sleep(1)
-            set_line_state(args.line,False)
-            time.sleep(1)
+while True:
+    led.set_value(0)
+    time.sleep(0.1)
+    led.set_value(1)
+    time.sleep(0.1)
