@@ -2,6 +2,8 @@ import paho.mqtt.client as mqtt
 import json
 
 
+
+
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
         print("connected OK")
