@@ -3,7 +3,7 @@ import json
 import os
 import time
 
-TOPIC = "MV900"
+TOPIC = "mgko"
 
 
 
@@ -29,7 +29,7 @@ client.on_connect = on_connect
 client.on_disconnect = on_disconnect
 client.on_publish = on_publish
 # address : localhost, port: 1883 에 연결
-client.connect('localhost', 1883)
+client.connect('broker.mqttdashboard.com', 1883)
 client.loop_start()
 # common topic 으로 메세지 발행
 
