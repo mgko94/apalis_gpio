@@ -1,5 +1,8 @@
 import paho.mqtt.client as mqtt
 import json
+import os
+import time
+
 
 
 
@@ -29,7 +32,17 @@ client.on_publish = on_publish
 client.connect('broker.mqttdashboard.com', 1883)
 client.loop_start()
 # common topic 으로 메세지 발행
-client.publish('mgko', json.dumps({"success": "ok"}), 1)
+
+
+while True :    
+    try :
+        adc = os.popen('cat /dev/apalis-adc0').read()[:-1]
+        client.publish('mgko', json.dumps({"adc": adc}), 1)
+        time.sleep(1)
+    except KeyboardInterrupt:
+        break
+    
+
 client.loop_stop()
 # 연결 종료
 client.disconnect()
