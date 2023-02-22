@@ -39,7 +39,7 @@ while True :
     try :
         adc = os.popen('cat /dev/apalis-adc0').read()[:-1]
         client.publish(TOPIC, json.dumps({"CHANNEL": "1" , "STATUS": "02" , "DATA": adc  }), 1)
-        time.sleep(1)
+        time.sleep(0.1)
     except KeyboardInterrupt:
         break
     
