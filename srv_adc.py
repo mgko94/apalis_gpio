@@ -34,16 +34,16 @@ client.loop_start()
 # common topic 으로 메세지 발행
 
 
-client.publish(TOPIC, json.dumps({"CHANNEL": [1] , "STATUS": "01" , "DATA": "START"  }), 1)
+client.publish(TOPIC, json.dumps({"CHANNEL": "1" , "STATUS": "01" , "DATA": "START"  }), 1)
 while True :    
     try :
         adc = os.popen('cat /dev/apalis-adc0').read()[:-1]
-        client.publish(TOPIC, json.dumps({"CHANNEL": "1" , "STATUS": "02" , "DATA": [int(adc)]  }), 1)
+        client.publish(TOPIC, json.dumps({"CHANNEL": "1" , "STATUS": "02" , "DATA": adc  }), 1)
         time.sleep(1)
     except KeyboardInterrupt:
         break
     
-client.publish(TOPIC, json.dumps({"CHANNEL": [1] , "STATUS": "03" , "DATA": "STOP"  }), 1)
+client.publish(TOPIC, json.dumps({"CHANNEL": "1" , "STATUS": "03" , "DATA": "STOP"  }), 1)
 client.loop_stop()
 # 연결 종료
 client.disconnect()
