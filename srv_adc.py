@@ -51,12 +51,15 @@ while True :
     try :
         # adc_value = os.popen('cat /dev/apalis-adc0').read()[:-1]
         adc_value=[]
+        start = time.time()
         for _ in range(2160):
             adc.spi_write(0x03, 0x00)
             adc_value.append(adc.get_adc_value())
             time.sleep(0.00006)
-        res = json.dumps(adc_value)
-        client.publish(TOPIC, json.dumps({"CHANNEL": "1" , "STATUS": "02" , "DATA": res  }), 1)
+        end = time.time()
+        print(f"{end - start:.5f} sec")
+        # res = json.dumps(adc_value)
+        # client.publish(TOPIC, json.dumps({"CHANNEL": "1" , "STATUS": "02" , "DATA": res  }), 1)
         
     except KeyboardInterrupt:
         adc.deinit()
