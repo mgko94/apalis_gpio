@@ -4,6 +4,7 @@ import os
 import time
 import time
 import adc_ad7616
+import json
 adc = adc_ad7616.AD7616()
 
 
@@ -49,10 +50,14 @@ client.publish(TOPIC, json.dumps({"CHANNEL": "1" , "STATUS": "01" , "DATA": "STA
 while True :    
     try :
         # adc_value = os.popen('cat /dev/apalis-adc0').read()[:-1]
-        adc.spi_write(0x03, 0x00)
-        adc_value=adc.get_adc_value()
-        client.publish(TOPIC, json.dumps({"CHANNEL": "1" , "STATUS": "02" , "DATA": adc_value  }), 1)
-        time.sleep(0.1)
+        adc_value=[]
+        for _ in range(2160):
+            adc.spi_write(0x03, 0x00)
+            adc_value.append(adc.get_adc_value())
+            time.sleep(0.00006)
+        res = json.dumps(adc_value)
+        client.publish(TOPIC, json.dumps({"CHANNEL": "1" , "STATUS": "02" , "DATA": res  }), 1)
+        
     except KeyboardInterrupt:
         adc.deinit()
         break
