@@ -52,7 +52,7 @@ while True :
         # adc_value = os.popen('cat /dev/apalis-adc0').read()[:-1]
         adc_value=[]
         start = time.time()
-        for _ in range(2160):
+        for _ in range(10):
             adc.spi_write(0x03, 0x00)
             adc_value.append(adc.get_adc_value())
 
