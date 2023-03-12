@@ -55,10 +55,11 @@ while True :
         for _ in range(2160):
             adc.spi_write(0x03, 0x00)
             adc_value.append(adc.get_adc_value())
+
+        res = json.dumps(adc_value)
+        client.publish(TOPIC, json.dumps({"CHANNEL": "1" , "STATUS": "02" , "DATA": res  }), 1)
         end = time.time()
         print(f"{end - start:.5f} sec")
-        # res = json.dumps(adc_value)
-        # client.publish(TOPIC, json.dumps({"CHANNEL": "1" , "STATUS": "02" , "DATA": res  }), 1)
         
     except KeyboardInterrupt:
         adc.deinit()
