@@ -2,6 +2,14 @@ import paho.mqtt.client as mqtt
 import json
 import os
 import time
+import time
+import adc_ad7616
+adc = adc_ad7616.AD7616()
+
+
+
+
+
 
 TOPIC = "MV900"
 
@@ -40,13 +48,22 @@ client.loop_start()
 client.publish(TOPIC, json.dumps({"CHANNEL": "1" , "STATUS": "01" , "DATA": "START"  }), 1)
 while True :    
     try :
-        adc = os.popen('cat /dev/apalis-adc0').read()[:-1]
-        client.publish(TOPIC, json.dumps({"CHANNEL": "1" , "STATUS": "02" , "DATA": adc  }), 1)
+        # adc_value = os.popen('cat /dev/apalis-adc0').read()[:-1]
+        adc.spi_write(0x03, 0x00)
+        adc_value=adc.get_adc_value()
+        client.publish(TOPIC, json.dumps({"CHANNEL": "1" , "STATUS": "02" , "DATA": adc_value  }), 1)
         time.sleep(0.1)
     except KeyboardInterrupt:
+        adc.deinit()
         break
     
 client.publish(TOPIC, json.dumps({"CHANNEL": "1" , "STATUS": "03" , "DATA": "STOP"  }), 1)
 client.loop_stop()
 # 연결 종료
 client.disconnect()
+# adc.deinit()
+
+
+
+ 
+
